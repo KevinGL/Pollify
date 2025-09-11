@@ -1,0 +1,8 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Bienvenue sur Pollify !{% endblock %}
+
+{% block body %}
+<a href="{{ url('app_login') }}">S'authentifier</a>
+<a href="{{ url('app_register') }}">S'inscrire</a>
+{% endblock %}

@@ -1,0 +1,41 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des sondages{% endblock %}
+
+{% block body %}
+
+<h1>Liste des sondages</h1>
+
+{% for poll in polls %}
+    <div>
+        <h3>{{ poll.title }}</h3>
+        <p>{{ poll.description }}</p>
+        <div>Sondage débuté le {{ poll.beginAt | date("d/m/Y") }}</div>
+        <div>S'achève le {{ poll.endAt | date("d/m/Y") }}</div>
+        <div>Créé par {{ poll.user.username }}</div>
+
+        {% set userVote = null %}
+
+        {% for vote in poll.votes %}
+            {% if vote.user.username == app.user.username %}
+                {% set userVote = vote %}
+            {% endif %}
+        {% endfor %}
+
+        {% if poll.beginAt | date("U") <= "now" | date("U") and poll.endAt | date("U") >= "now" | date("U") and userVote == null %}
+            <div>Vous êtes plutôt pour :</div>
+            <ul>
+                {% for choice in poll.choices %}
+                    <li>{{ choice.title }} <a href="{{ url('vote', {'pollID': poll.id, 'choiceID': choice.id}) }}">Choisir</a></li>
+                {% endfor %}
+            </ul>
+        {% elseif poll.beginAt | date("U") <= "now" | date("U") and poll.endAt | date("U") >= "now" | date("U") and userVote != null %}
+            <div>Vous avez voté pour {{ userVote.choice.title }}</div>
+        {% elseif poll.beginAt | date("U") > "now" | date("U") or poll.endAt | date("U") < "now" | date("U") %}
+            <div>Sondage terminé</div>
+        {% endif %}
+        <hr>
+    </div>
+{% endfor %}
+
+{% endblock %}
