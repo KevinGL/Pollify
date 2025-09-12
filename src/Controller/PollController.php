@@ -7,6 +7,7 @@ use App\Repository\ChoiceRepository;
 use App\Repository\PollRepository;
 use App\Repository\VoteRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\Tools\Console\EntityManagerProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
@@ -32,6 +33,11 @@ final class PollController extends AbstractController
     #[Route("/poll/vote/{pollID}/{choiceID}", name: "vote")]
     public function vote(EntityManagerInterface $em, PollRepository $repo, ChoiceRepository $choiceRepo, VoteRepository $voteRepo, int $pollID, int $choiceID): Response
     {
+        if(!$this->getUser())
+        {
+            return $this->redirectToRoute("app_home");
+        }
+        
         $poll = $repo->find($pollID);
         $choice = $choiceRepo->find($choiceID);
 
@@ -52,12 +58,32 @@ final class PollController extends AbstractController
 
         else
         {
-            return $this->render("error.html.twig",
-            [
-                "error" => 403,
-                "message" => "Vous avez déjà voté pour ce sondage"
-            ]);
+            $this->addFlash("error", "Vous avez déjà voté pour ce sondage");
         }
+
+        return $this->redirectToRoute("app_poll");
+    }
+
+    #[Route("/poll/delete/{id}", name: "delete_poll")]
+    public function delete(EntityManagerInterface $em, PollRepository $repo, int $id): Response
+    {
+        if(!$this->getUser())
+        {
+            return $this->redirectToRoute("app_home");
+        }
+
+        if(!in_array("ROLE_ADMIN", $this->getUser()->getRoles()))
+        {
+            $this->addFlash("error", "Cette action est réservée aux admins");
+            return $this->redirectToRoute("app_poll");
+        }
+
+        $poll = $repo->find($id);
+
+        $em->remove($poll);
+        $em->flush();
+
+        $this->addFlash("success", "Ce sondage a bien été supprimé");
 
         return $this->redirectToRoute("app_poll");
     }

@@ -34,8 +34,43 @@
         {% elseif poll.beginAt | date("U") > "now" | date("U") or poll.endAt | date("U") < "now" | date("U") %}
             <div>Sondage terminé</div>
         {% endif %}
+
+        {% if "ROLE_ADMIN" in app.user.roles %}
+            <button id="{{ poll.id }}" class="buttons_delete">Supprimer ce sondage</button>
+        {% endif %}
         <hr>
     </div>
 {% endfor %}
+
+<div id="modal" hidden>
+    Confirmer la suppression de ce sondage (Action irréversible) ?
+    <button id="delete_yes">Oui</button>
+    <button id="delete_no">Non</button>
+</div>
+
+<script>
+    const modal = document.getElementById("modal");
+    const buttons = Array.from(document.getElementsByClassName("buttons_delete"));
+    let idDelete;
+
+    buttons.map((b) =>
+    {
+        b.addEventListener("click", (e) =>
+        {
+            modal.hidden = false;
+            idDelete = b.id
+        });
+    });
+
+    document.getElementById("delete_yes").addEventListener("click", () =>
+    {
+        window.location.href = "/poll/delete/" + idDelete;
+    });
+
+    document.getElementById("delete_no").addEventListener("click", () =>
+    {
+        modal.hidden = true;
+    });
+</script>
 
 {% endblock %}

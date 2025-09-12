@@ -10,8 +10,14 @@
         {% block javascripts %}
             {% block importmap %}{{ importmap('app') }}{% endblock %}
         {% endblock %}
+
+        {#<script src="https://cdn.tailwindcss.com"></script>#}
     </head>
     <body>
+        {% for type, messages in app.flashes %}
+            {{ messages | join("\n") }}
+        {% endfor %}
+
         {% block body %}{% endblock %}
     </body>
 </html>
