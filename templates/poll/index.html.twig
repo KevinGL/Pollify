@@ -30,7 +30,7 @@
             <div>Vous êtes plutôt pour :</div>
             <ul>
                 {% for choice in poll.choices %}
-                    <li>{{ choice.title }} <a href="{{ url('vote', {'pollID': poll.id, 'choiceID': choice.id}) }}">Choisir</a></li>
+                    <li>{{ choice.title }} <a href="{{ url('vote', {'pollID': poll.id, 'choiceID': choice.id}) }}">Voter</a></li>
                 {% endfor %}
             </ul>
         {% elseif poll.beginAt | date("U") <= "now" | date("U") and poll.endAt | date("U") >= "now" | date("U") and userVote != null %}
