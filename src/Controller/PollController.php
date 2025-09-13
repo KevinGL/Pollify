@@ -82,6 +82,41 @@ final class PollController extends AbstractController
         return $this->render('poll/add.html.twig', ["form" => $form]);
     }
 
+    private function stringToColor(string $text): string
+    {
+        $hash = md5($text);
+        return sprintf("rgb(%d, %d, %d)",
+            hexdec(substr($hash, 0, 2)),
+            hexdec(substr($hash, 2, 2)),
+            hexdec(substr($hash, 4, 2))
+        );
+    }
+
+
+    #[Route("/polls/view/{id}", name: "view_poll")]
+    public function view(PollRepository $repo, VoteRepository $voteRepo, int $id): Response
+    {
+        $poll = $repo->find($id);
+
+        $votes = $voteRepo->getChoicesWithVotes($poll);
+        $colors = [];
+
+        foreach($votes as $vote)
+        {
+            /*$r = rand(0, 255);
+            $g = rand(0, 255);
+            $b = rand(0, 255);
+            
+            array_push($colors, "rgb(" . $r . ", " . $g . ", " . $b . ")");*/
+
+            array_push($colors, $this->stringToColor($vote["choice_title"]));
+        }
+
+        //dd($colors);
+
+        return $this->render("poll/view.html.twig", ["poll" => $poll, "votes" => $votes, "colors" => $colors]);
+    }
+
     #[Route("/polls/edit/{id}", name: "edit_poll")]
     public function edit(Request $req, EntityManagerInterface $em, PollRepository $repo, ChoiceRepository $choiceRepo, int $id): Response
     {

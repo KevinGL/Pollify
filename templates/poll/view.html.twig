@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ poll.title }}{% endblock %}
+
+{% block body %}
+
+<h1>{{ poll.title }}</h1>
+
+<canvas id="chart" style="width:100%;max-width:700px"></canvas>
+
+<script>
+
+    let xValues =
+    [
+        {% for vote in votes %}
+            "{{ vote.choice_title }}",
+        {% endfor %}
+    ];
+
+    let yValues =
+    [
+        {% for vote in votes %}
+            {{ vote.votes_count }},
+        {% endfor %}
+    ];
+
+    let barColors =
+    [
+        {% for color in colors %}
+            "{{ color }}",
+        {% endfor %}
+    ];
+
+    const myChart = new Chart("chart",
+    {
+        type: "pie",
+        data:
+        {
+            labels: xValues,
+            datasets:
+            [{
+                backgroundColor: barColors,
+                data: yValues
+            }]
+        }
+    });
+</script>
+
+{% endblock %}

@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\Poll;
 use App\Entity\Vote;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -50,5 +51,19 @@ class VoteRepository extends ServiceEntityRepository
             ->setParameter("poll", $poll)
             ->getQuery()
             ->getOneOrNullResult();
+    }
+
+    public function getChoicesWithVotes(Poll $poll): array
+    {
+        return $this->getEntityManager()->createQueryBuilder()
+            ->select('c.id AS choice_id, c.title AS choice_title, COUNT(v.id) AS votes_count')
+            ->from(\App\Entity\Choice::class, 'c')
+            ->leftJoin('c.votes', 'v')
+            ->where('c.poll = :poll')
+            ->setParameter('poll', $poll)
+            ->groupBy('c.id')
+            ->orderBy('c.id', 'ASC')
+            ->getQuery()
+            ->getResult();
     }
 }

@@ -45,6 +45,7 @@
             {% if poll.beginAt | date("U") >= "now" | date("U") %}
                 <a href="{{ url('edit_poll', {'id': poll.id}) }}">Modifier ce sondage</a>
             {% endif %}
+            <a href="{{ url('view_poll', {'id': poll.id}) }}">Statistiques</a>
         {% endif %}
         <hr>
     </div>
