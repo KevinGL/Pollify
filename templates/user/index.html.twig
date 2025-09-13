@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des utilisateurs{% endblock %}
+
+{% block body %}
+
+<h1>Liste des utilisateurs</h1>
+
+{% for i in 1..nbPages %}
+    <a href="{{ url('app_user', {'page': i}) }}">{{ i }}</a>
+{% endfor %}
+
+<table>
+    <thead>
+        <tr>
+            <th>id</th>
+            <th>username</th>
+            <th>admin ?</th>
+            <th>Action</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for user in users %}
+            <tr>
+                <th>{{ user.id }}</th>
+                <td>{{ user.username }}</td>
+                <td>{{ "ROLE_ADMIN" in user.roles ? "Oui" : "Non" }}</td>
+                <td>
+                    {% if "ROLE_ADMIN" in user.roles %}
+                        <a  href="{{ url('unset_admin', {'id': user.id}) }}">Supprimer le statut admin</a>
+                    {% else %}
+                        <a  href="{{ url('set_admin', {'id': user.id}) }}">Basculer en admin</a>
+                    {% endif %}
+                    <button id="{{ user.id }}" class="buttons_delete">Supprimer cet utilisateur</button>
+                </td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% for i in 1..nbPages %}
+    <a href="{{ url('app_user', {'page': i}) }}">{{ i }}</a>
+{% endfor %}
+
+<div id="modal" hidden>
+    Confirmer la suppression de cet utilisateur (Action irréversible) ?
+    <button id="delete_yes">Oui</button>
+    <button id="delete_no">Non</button>
+</div>
+
+<script>
+    const modal = document.getElementById("modal");
+    const buttons = Array.from(document.getElementsByClassName("buttons_delete"));
+    let idDelete;
+
+    buttons.map((b) =>
+    {
+        b.addEventListener("click", () =>
+        {
+            modal.hidden = false;
+            idDelete = b.id;
+        });
+    });
+
+    document.getElementById("delete_yes").addEventListener("click", () =>
+    {
+        window.location.href = "/users/delete/" + idDelete;
+    });
+
+    document.getElementById("delete_no").addEventListener("click", () =>
+    {
+        modal.hidden = true;
+    });
+</script>
+
+{% endblock %}

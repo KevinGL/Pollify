@@ -41,19 +41,15 @@ class PollRepository extends ServiceEntityRepository
     //        ;
     //    }
 
-    public function paginatePolls(int $page, int $limit): array
+    public function paginatePolls(int $page, int $limit, int &$nbPages): array
     {
+        $results = $this->createQueryBuilder("p")->getQuery()->getResult();
+        $nbPages = ceil(count($results) / $limit);
+        
         return $this->createQueryBuilder("p")
             ->setFirstResult(($page - 1) * $limit)
             ->setMaxResults($limit)
             ->getQuery()
             ->getResult();
-    }
-
-    public function getNbPages($limit): int
-    {
-        $results = $this->createQueryBuilder("r")->getQuery()->getResult();
-        
-        return count($results) / $limit;
     }
 }

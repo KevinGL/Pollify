@@ -13,16 +13,17 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class PollController extends AbstractController
 {
-    #[Route('/poll/{page}', name: 'app_poll')]
-    public function index(PollRepository $repo, int $page): Response
+    #[Route('/polls/{page}', name: 'app_poll')]
+    public function index(PollRepository $repo, int $page = 1): Response
     {
         if(!$this->getUser())
         {
             return $this->redirectToRoute("app_home");
         }
+
+        $nbPages = 1;
         
-        $polls = $repo->paginatePolls($page, $_ENV["LIMIT_PAGES"]);
-        $nbPages = $repo->getNbPages($_ENV["LIMIT_PAGES"]);
+        $polls = $repo->paginatePolls($page, $_ENV["LIMIT_PAGES"], $nbPages);
         
         return $this->render('poll/index.html.twig',
         [

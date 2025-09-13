@@ -57,4 +57,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function paginateUsers(int $page, int $limit, int &$nbPages): array
+    {
+        $results = $this->createQueryBuilder("u")->getQuery()->getResult();
+        $nbPages = ceil(count($results) / $limit);
+        
+        return $this->createQueryBuilder("u")
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
 }
