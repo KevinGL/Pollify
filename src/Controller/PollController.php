@@ -7,26 +7,27 @@ use App\Repository\ChoiceRepository;
 use App\Repository\PollRepository;
 use App\Repository\VoteRepository;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Tools\Console\EntityManagerProvider;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 
 final class PollController extends AbstractController
 {
-    #[Route('/poll', name: 'app_poll')]
-    public function index(PollRepository $repo): Response
+    #[Route('/poll/{page}', name: 'app_poll')]
+    public function index(PollRepository $repo, int $page): Response
     {
         if(!$this->getUser())
         {
             return $this->redirectToRoute("app_home");
         }
         
-        $polls = $repo->findAll();
+        $polls = $repo->paginatePolls($page, $_ENV["LIMIT_PAGES"]);
+        $nbPages = $repo->getNbPages($_ENV["LIMIT_PAGES"]);
         
         return $this->render('poll/index.html.twig',
         [
-            'polls' => $polls
+            'polls' => $polls,
+            'nbPages' => $nbPages,
         ]);
     }
 

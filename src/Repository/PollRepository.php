@@ -40,4 +40,20 @@ class PollRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function paginatePolls(int $page, int $limit): array
+    {
+        return $this->createQueryBuilder("p")
+            ->setFirstResult(($page - 1) * $limit)
+            ->setMaxResults($limit)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function getNbPages($limit): int
+    {
+        $results = $this->createQueryBuilder("r")->getQuery()->getResult();
+        
+        return count($results) / $limit;
+    }
 }

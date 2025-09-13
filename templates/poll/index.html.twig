@@ -6,6 +6,10 @@
 
 <h1>Liste des sondages</h1>
 
+{% for i in 1..nbPages %}
+    <a href="{{ url('app_poll', {'page': i}) }}">{{ i }}</a>
+{% endfor %}
+
 {% for poll in polls %}
     <div>
         <h3>{{ poll.title }}</h3>
@@ -40,6 +44,10 @@
         {% endif %}
         <hr>
     </div>
+{% endfor %}
+
+{% for i in 1..nbPages %}
+    <a href="{{ url('app_poll', {'page': i}) }}">{{ i }}</a>
 {% endfor %}
 
 <div id="modal" hidden>
