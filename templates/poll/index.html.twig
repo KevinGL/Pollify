@@ -39,8 +39,12 @@
             <div>Sondage terminé</div>
         {% endif %}
 
-        {% if "ROLE_ADMIN" in app.user.roles %}
+        {% if "ROLE_ADMIN" in app.user.roles or poll.user == app.user %}
             <button id="{{ poll.id }}" class="buttons_delete">Supprimer ce sondage</button>
+            
+            {% if poll.beginAt | date("U") >= "now" | date("U") %}
+                <a href="{{ url('edit_poll', {'id': poll.id}) }}">Modifier ce sondage</a>
+            {% endif %}
         {% endif %}
         <hr>
     </div>

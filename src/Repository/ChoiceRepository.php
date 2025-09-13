@@ -40,4 +40,13 @@ class ChoiceRepository extends ServiceEntityRepository
     //            ->getOneOrNullResult()
     //        ;
     //    }
+
+    public function findByTitle(string $title): ?Choice
+    {
+        return $this->createQueryBuilder("c")
+            ->where("c.title = :title")
+            ->setParameter("title", $title)
+            ->getQuery()
+            ->getOneOrNullResult();
+    }
 }
