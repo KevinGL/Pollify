@@ -216,7 +216,7 @@ final class PollController extends AbstractController
             $this->addFlash("error", "Vous avez déjà voté pour ce sondage");
         }
 
-        return $this->redirectToRoute("app_poll");
+        return $this->redirectToRoute("view_poll", ["id" => $pollID]);
     }
 
     #[Route("/poll/delete/{id}", name: "delete_poll")]

@@ -31,42 +31,6 @@
                 <p class="text-sm text-gray-600 mb-3">Créé par : {{ poll.user.username }}</p>
             </div>
 
-            {% set userVote = null %}
-            {% for vote in poll.votes %}
-                {% if vote.user.username == app.user.username %}
-                    {% set userVote = vote %}
-                {% endif %}
-            {% endfor %}
-
-            <div class="mb-4">
-                {% if poll.beginAt | date("U") <= "now" | date("U") and poll.endAt | date("U") >= "now" | date("U") and userVote == null %}
-                    <div class="text-gray-800 font-medium mb-2">Votez pour :</div>
-                    <ul class="list-disc list-inside space-y-1">
-                        {% for choice in poll.choices %}
-                            <li class="flex justify-between items-center">
-                                <span>- {{ choice.title }}</span>
-                                <a href="{{ url('vote', {'pollID': poll.id, 'choiceID': choice.id}) }}"
-                                   class="text-indigo-700 hover:underline text-sm font-medium flex items-center gap-1">
-                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                                    </svg>
-                                    Voter
-                                </a>
-                            </li>
-                        {% endfor %}
-                    </ul>
-                {% elseif poll.beginAt | date("U") <= "now" | date("U") and poll.endAt | date("U") >= "now" | date("U") and userVote != null %}
-                    <div class="text-green-600 font-semibold flex items-center gap-2">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" />
-                        </svg>
-                        Vous avez voté pour : {{ userVote.choice.title }}
-                    </div>
-                {% else %}
-                    <div class="text-gray-400 font-medium">Sondage terminé</div>
-                {% endif %}
-            </div>
-
             {% if "ROLE_ADMIN" in app.user.roles or poll.user == app.user %}
             <div class="flex justify-between mt-4">
                 <button id="{{ poll.id }}" class="delete-btn bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded text-sm flex items-center gap-1">
@@ -91,7 +55,7 @@
                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 11V5a1 1 0 011-1h2a1 1 0 011 1v6m-4 4h4m0 0h4m-4 0v4m0-4v-4" />
                        </svg>
-                       Stats
+                       Détails
                     </a>
                 </div>
             </div>
