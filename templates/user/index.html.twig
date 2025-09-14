@@ -3,49 +3,62 @@
 {% block title %}Liste des utilisateurs{% endblock %}
 
 {% block body %}
+<div class="min-h-screen bg-gray-50 px-4 py-8">
+    <div class="max-w-6xl mx-auto bg-white shadow-xl rounded-2xl p-8">
+        <h1 class="text-3xl font-bold text-gray-800 mb-6 text-center">Liste des utilisateurs</h1>
 
-<h1>Liste des utilisateurs</h1>
+        <div class="overflow-x-auto">
+            <table class="min-w-full border border-gray-200 divide-y divide-gray-200">
+                <thead class="bg-gray-100">
+                    <tr>
+                        <th class="px-4 py-2 text-left text-gray-600">ID</th>
+                        <th class="px-4 py-2 text-left text-gray-600">Username</th>
+                        <th class="px-4 py-2 text-left text-gray-600">Admin ?</th>
+                        <th class="px-4 py-2 text-left text-gray-600">Actions</th>
+                    </tr>
+                </thead>
+                <tbody class="divide-y divide-gray-200">
+                    {% for user in users %}
+                        <tr class="hover:bg-gray-50">
+                            <td class="px-4 py-2">{{ user.id }}</td>
+                            <td class="px-4 py-2">{{ user.username }}</td>
+                            <td class="px-4 py-2">{{ "ROLE_ADMIN" in user.roles ? "Oui" : "Non" }}</td>
+                            <td class="px-4 py-2 flex gap-2 flex-wrap">
+                                {% if "ROLE_ADMIN" in user.roles %}
+                                    <a href="{{ url('unset_admin', {'id': user.id}) }}" class="px-3 py-1 bg-yellow-500 text-white rounded hover:bg-yellow-600 transition">
+                                        Retirer admin
+                                    </a>
+                                {% else %}
+                                    <a href="{{ url('set_admin', {'id': user.id}) }}" class="px-3 py-1 bg-green-500 text-white rounded hover:bg-green-600 transition">
+                                        Promouvoir admin
+                                    </a>
+                                {% endif %}
+                                <button id="{{ user.id }}" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition buttons_delete">
+                                    Supprimer
+                                </button>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-{% for i in 1..nbPages %}
-    <a href="{{ url('app_user', {'page': i}) }}">{{ i }}</a>
-{% endfor %}
+        <div class="mt-6 flex justify-center gap-2">
+            {% for i in 1..nbPages %}
+                <a href="{{ url('app_user', {'page': i}) }}" class="px-3 py-1 border rounded {{ i == currentPage ? 'bg-indigo-600 hover:bg-indigo-700 text-white' : 'bg-white hover:bg-gray-100' }}">{{ i }}</a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 
-<table>
-    <thead>
-        <tr>
-            <th>id</th>
-            <th>username</th>
-            <th>admin ?</th>
-            <th>Action</th>
-        </tr>
-    </thead>
-    <tbody>
-        {% for user in users %}
-            <tr>
-                <th>{{ user.id }}</th>
-                <td>{{ user.username }}</td>
-                <td>{{ "ROLE_ADMIN" in user.roles ? "Oui" : "Non" }}</td>
-                <td>
-                    {% if "ROLE_ADMIN" in user.roles %}
-                        <a  href="{{ url('unset_admin', {'id': user.id}) }}">Supprimer le statut admin</a>
-                    {% else %}
-                        <a  href="{{ url('set_admin', {'id': user.id}) }}">Basculer en admin</a>
-                    {% endif %}
-                    <button id="{{ user.id }}" class="buttons_delete">Supprimer cet utilisateur</button>
-                </td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-
-{% for i in 1..nbPages %}
-    <a href="{{ url('app_user', {'page': i}) }}">{{ i }}</a>
-{% endfor %}
-
-<div id="modal" hidden>
-    Confirmer la suppression de cet utilisateur (Action irréversible) ?
-    <button id="delete_yes">Oui</button>
-    <button id="delete_no">Non</button>
+<div id="modal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden">
+    <div class="bg-white p-6 rounded-xl shadow-lg max-w-sm w-full text-center">
+        <p class="mb-4 font-semibold">Confirmer la suppression de cet utilisateur ?</p>
+        <div class="flex justify-around gap-4">
+            <button id="delete_yes" class="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition">Oui</button>
+            <button id="delete_no" class="px-4 py-2 bg-gray-300 rounded hover:bg-gray-400 transition">Non</button>
+        </div>
+    </div>
 </div>
 
 <script>
@@ -57,7 +70,7 @@
     {
         b.addEventListener("click", () =>
         {
-            modal.hidden = false;
+            modal.classList.remove("hidden");
             idDelete = b.id;
         });
     });
@@ -69,7 +82,7 @@
 
     document.getElementById("delete_no").addEventListener("click", () =>
     {
-        modal.hidden = true;
+        modal.classList.add("hidden");
     });
 </script>
 

@@ -1,19 +1,44 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Créer un compte{% endblock %}
 
 {% block body %}
-    <h1>Register</h1>
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-white to-purple-100 px-4">
 
-    {{ form_errors(registrationForm) }}
+    <div class="bg-white shadow-2xl rounded-2xl p-8 w-full max-w-2xl flex flex-col md:flex-row gap-8 items-center">
 
-    {{ form_start(registrationForm) }}
-        {{ form_row(registrationForm.username) }}
-        {{ form_row(registrationForm.plainPassword, {
-            label: 'Password'
-        }) }}
-        {{ form_row(registrationForm.agreeTerms) }}
+        <div class="w-full md:w-1/2 flex justify-center items-center">
+            <img src="/images/undraw_sign-up_qamz.svg" 
+                 alt="Register illustration" 
+                 class="w-40 md:w-64 lg:w-72 h-auto object-contain">
+        </div>
 
-        <button type="submit" class="btn">Register</button>
-    {{ form_end(registrationForm) }}
+        <div class="w-full md:w-1/2">
+            <h1 class="text-3xl font-extrabold text-gray-800 mb-4 text-center md:text-left">Créer un compte</h1>
+            <p class="text-gray-600 mb-6 text-center md:text-left">Rejoignez Pollify et commencez à créer vos sondages !</p>
+
+            {{ form_start(registrationForm, {'attr': {'class': 'space-y-4'}}) }}
+                
+                {{ form_row(registrationForm.username, {'attr': {'class': 'mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2'}}) }}
+                
+                {{ form_row(registrationForm.plainPassword, {
+                    label: 'Mot de passe',
+                    attr: {'class': 'mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 p-2'}
+                }) }}
+                
+                {{ form_row(registrationForm.agreeTerms, {'label': 'J’accepte les conditions', 'attr': {'class': 'h-4 w-4'}}) }}
+
+                <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-4 rounded-lg transition">
+                    S’inscrire
+                </button>
+
+            {{ form_end(registrationForm) }}
+
+            <p class="text-sm text-gray-600 mt-4 text-center md:text-left">
+                Déjà un compte ? 
+                <a href="{{ url('app_login') }}" class="text-indigo-600 hover:underline">Se connecter</a>
+            </p>
+        </div>
+    </div>
+</div>
 {% endblock %}

@@ -1,37 +1,49 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}{{ poll.title }}{% endblock %}
+{% block title %}Statistiques - {{ poll.title }}{% endblock %}
 
 {% block body %}
+<div class="min-h-screen bg-gradient-to-br from-indigo-50 via-white to-purple-50 px-4 py-8 flex items-center justify-center">
 
-<h1>{{ poll.title }}</h1>
+    <div class="bg-white shadow-xl rounded-2xl p-12 w-full max-w-4xl">
+        <h1 class="text-3xl font-bold text-gray-800 mb-4 text-center">{{ poll.title }}</h1>
 
-<canvas id="chart" style="width:100%;max-width:700px"></canvas>
+        <p class="text-gray-600 mb-6 text-center">
+            Statistiques des votes pour ce sondage
+        </p>
+
+        <div class="flex justify-center mb-6">
+            <div class="w-full" style="max-width:1000px; height:600px;">
+                <canvas id="chart" style="width:100%; height:400px;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
 
 <script>
-
-    let xValues =
+    const xValues =
     [
         {% for vote in votes %}
             "{{ vote.choice_title }}",
         {% endfor %}
     ];
 
-    let yValues =
+    const yValues =
     [
         {% for vote in votes %}
             {{ vote.votes_count }},
         {% endfor %}
     ];
 
-    let barColors =
+    const barColors =
     [
         {% for color in colors %}
             "{{ color }}",
         {% endfor %}
     ];
 
-    const myChart = new Chart("chart",
+    const ctx = document.getElementById("chart").getContext("2d");
+    const myChart = new Chart(ctx,
     {
         type: "pie",
         data:
@@ -42,6 +54,16 @@
                 backgroundColor: barColors,
                 data: yValues
             }]
+        },
+        options:
+        {
+            responsive: true,
+            maintainAspectRatio: false,
+            plugins:
+            {
+                legend: { display: false },
+                tooltip: { enabled: true }
+            }
         }
     });
 </script>

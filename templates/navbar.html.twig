@@ -1,0 +1,49 @@
+<nav class="bg-white shadow-md">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between h-16">
+            <div class="flex-shrink-0 flex items-center">
+                <a href="{{ url('app_home') }}" class="text-xl font-bold text-purple-600">Pollify</a>
+            </div>
+
+            <div class="hidden md:flex md:items-center md:space-x-6">
+                <a href="{{ url('app_poll', {'page': 1}) }}" class="text-gray-700 hover:text-purple-600 transition">Sondages</a>
+                <a href="{{ url('add_poll') }}" class="text-gray-700 hover:text-purple-600 transition">Ajouter un sondage</a>
+
+                {% if is_granted("ROLE_ADMIN") %}
+                    <a href="{{ url('app_user', {'page': 1}) }}" class="text-gray-700 hover:text-purple-600 transition">Utilisateurs</a>
+                {% endif %}
+            </div>
+
+            <div class="flex items-center space-x-4">
+                <span class="text-gray-700">{{ app.user.username }}</span>
+                <a href="{{ url('app_logout') }}" class="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600 transition">Déconnexion</a>
+            </div>
+
+            <div class="flex md:hidden items-center">
+                <button id="mobile-menu-button" class="focus:outline-none">
+                    <svg class="w-6 h-6 text-gray-700" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                              d="M4 6h16M4 12h16M4 18h16"/>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <div id="mobile-menu" class="hidden md:hidden px-4 pb-4">
+        <a href="{{ url('app_poll', {'page': 1}) }}" class="block py-2 text-gray-700 hover:text-purple-600">Sondages</a>
+        <a href="{{ url('add_poll') }}" class="block py-2 text-gray-700 hover:text-purple-600">Ajouter un sondage</a>
+        <a href="{{ url('app_user', {'page': 1}) }}" class="block py-2 text-gray-700 hover:text-purple-600">Utilisateurs</a>
+        <a href="{{ url('app_logout') }}" class="block py-2 text-red-500">Déconnexion</a>
+    </div>
+</nav>
+
+<script>
+    const mobileButton = document.getElementById("mobile-menu-button");
+    const mobileMenu = document.getElementById("mobile-menu");
+
+    mobileButton.addEventListener("click", () =>
+    {
+        mobileMenu.classList.toggle("hidden");
+    });
+</script>

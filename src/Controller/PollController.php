@@ -33,6 +33,7 @@ final class PollController extends AbstractController
         [
             'polls' => $polls,
             'nbPages' => $nbPages,
+            "currentPage" => $page
         ]);
     }
 

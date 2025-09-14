@@ -3,6 +3,28 @@
 {% block title %}Bienvenue sur Pollify !{% endblock %}
 
 {% block body %}
-<a href="{{ url('app_login') }}">S'authentifier</a>
-<a href="{{ url('app_register') }}">S'inscrire</a>
+<div class="min-h-screen flex items-center justify-center bg-gradient-to-br from-indigo-100 via-white to-purple-100 px-4">
+  <div class="bg-white shadow-lg rounded-2xl p-10 w-full max-w-2xl flex flex-col md:flex-row items-center gap-8">
+    
+    <div class="hidden md:block w-1/2">
+      <img src="/images/undraw_voting_3ygx.svg" alt="Vote illustration" class="w-full h-auto">
+    </div>
+    
+    <div class="text-center md:text-left w-full md:w-1/2">
+      <h1 class="text-3xl font-extrabold text-gray-800 mb-4">Bienvenue sur Pollify</h1>
+      <p class="text-gray-600 mb-8">Vos sondages, vos choix, vos résultats.</p>
+      
+      <div class="flex flex-col gap-4">
+        <a href="{{ url('app_login') }}" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-semibold py-3 px-4 rounded-lg transition">
+          S'authentifier
+        </a>
+        <a href="{{ url('app_register') }}" class="w-full border border-gray-300 hover:border-gray-400 text-gray-700 font-semibold py-3 px-4 rounded-lg transition">
+          S'enregistrer
+        </a>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
 {% endblock %}

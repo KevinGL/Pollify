@@ -30,6 +30,7 @@ class PollType extends AbstractType
                 "class" => User::class,
                 "choice_label" => "username",
                 'placeholder' => 'Sélectionner un utilisateur',
+                "label" => "Utilisateur"
             ]);
         }
 
@@ -54,7 +55,14 @@ class PollType extends AbstractType
             }])
         ]);
 
-        $builder->add("save", SubmitType::class);
+        $builder->add("save", SubmitType::class,
+        [
+            "attr" =>
+            [
+                "class" => "bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-lg transition"
+            ],
+            "label" => "Sauvegarder"
+        ]);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

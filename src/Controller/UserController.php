@@ -21,7 +21,7 @@ final class UserController extends AbstractController
         if(!in_array("ROLE_ADMIN", $this->getUser()->getRoles()))
         {
             $this->addFlash("error", "Accès réservé aux administrateurs");
-            return $this->redirectToRoute("app_user");
+            return $this->redirectToRoute("app_poll");
         }
 
         $nbPages = 1;
@@ -30,7 +30,8 @@ final class UserController extends AbstractController
         return $this->render('user/index.html.twig',
         [
             'users' => $users,
-            'nbPages' => $nbPages
+            'nbPages' => $nbPages,
+            "currentPage" => $page
         ]);
     }
 
@@ -45,7 +46,7 @@ final class UserController extends AbstractController
         if(!in_array("ROLE_ADMIN", $this->getUser()->getRoles()))
         {
             $this->addFlash("error", "Accès réservé aux administrateurs");
-            return $this->redirectToRoute("app_user");
+            return $this->redirectToRoute("app_poll");
         }
 
         $user = $repo->find($id);
@@ -66,7 +67,7 @@ final class UserController extends AbstractController
         if(!in_array("ROLE_ADMIN", $this->getUser()->getRoles()))
         {
             $this->addFlash("error", "Accès réservé aux administrateurs");
-            return $this->redirectToRoute("app_user");
+            return $this->redirectToRoute("app_poll");
         }
 
         $user = $repo->find($id);
@@ -89,7 +90,7 @@ final class UserController extends AbstractController
         if(!in_array("ROLE_ADMIN", $this->getUser()->getRoles()))
         {
             $this->addFlash("error", "Accès réservé aux administrateurs");
-            return $this->redirectToRoute("app_user");
+            return $this->redirectToRoute("app_poll");
         }
 
         $user = $repo->find($id);
