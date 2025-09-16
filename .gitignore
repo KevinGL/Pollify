@@ -20,3 +20,4 @@
 /assets/vendor/
 ###< symfony/asset-mapper ###
 /src/DataFixtures
+/pollify_polls_50.csv
